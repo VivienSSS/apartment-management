@@ -1,0 +1,36 @@
+{
+  "name": "example-with-tailwindcss",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start"
+  },
+  "dependencies": {
+    "@corvu/drawer": "^0.2.2",
+    "@corvu/otp-field": "^0.1.3",
+    "@corvu/resizable": "^0.2.3",
+    "@fontsource/inter": "^5.1.0",
+    "@kobalte/core": "^0.13.7",
+    "@solid-primitives/refs": "^1.0.8",
+    "@solidjs/router": "^0.15.0",
+    "@solidjs/start": "^1.0.10",
+    "autoprefixer": "^10.4.19",
+    "chart.js": "^4.4.6",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "cmdk-solid": "^1.1.0",
+    "embla-carousel-solid": "^8.3.1",
+    "lucide-solid": "^0.454.0",
+    "postcss": "^8.4.38",
+    "solid-js": "^1.9.2",
+    "solid-sonner": "^0.2.8",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss": "^3.4.3",
+    "tailwindcss-animate": "^1.0.7",
+    "vinxi": "^0.4.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
