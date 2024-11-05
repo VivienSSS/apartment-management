@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 
 const DashboardHomePage: Component<{}> = (props) => {
-  return <div>CHILDREN</div>;
+  return <form></form>;
 };
 
 export default DashboardHomePage;

@@ -1,11 +1,35 @@
 import { Button } from "~/components/ui/button";
-import { Component } from "solid-js";
+import { Component, createEffect } from "solid-js";
 import Input from "~/components/ui/input";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
 import { login } from "~/lib/utils";
+import { useSubmission } from "@solidjs/router";
+import { showToast } from "~/components/ui/toast";
 
 const LoginPage: Component<{}> = (props) => {
+  const loginResponse = useSubmission(login);
+
+  createEffect(() => {
+    if (loginResponse.error !== undefined) {
+      const errorResponse = loginResponse.error;
+      switch (errorResponse.code) {
+        case 400:
+          showToast({
+            title: "Invalid operation",
+            description: errorResponse.message,
+          });
+          break;
+        default:
+          showToast({
+            title: `Internal server error`,
+            description: `message: ${errorResponse.message}`,
+            variant: "destructive",
+          });
+      }
+    }
+  });
+
   return (
     <main class="h-screen max-h-screen flex justify-center items-center">
       <form action={login} class="space-y-5" method="post">

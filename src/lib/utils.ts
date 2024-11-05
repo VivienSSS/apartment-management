@@ -20,7 +20,10 @@ export const login = action(async (formData: FormData) => {
 
   // check if username and password are not empty
   if (!username || !password) {
-    return;
+    throw {
+      code: 400,
+      message: "Invalid username or password",
+    };
   }
   // check if username and password are correct
   if (
@@ -46,7 +49,10 @@ export const login = action(async (formData: FormData) => {
     // redirect
     throw redirect("/dashboard");
   }
-  console.log("Invalid username or password");
+  throw {
+    code: 400,
+    message: "Invalid username or password"
+  }
 });
 
 export const validateUser = query(async () => {

@@ -1,0 +1,7 @@
+services:
+  app:
+    container_name: apartment-management-system
+    build: 
+      context: .
+    ports:
+      - "8001:3000"

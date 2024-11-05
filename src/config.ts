@@ -2,7 +2,7 @@
 export const config = {
     credentials: {
         username: "admin",
-        password: "admin12345",
+        password: "vivien123",
         sessionPassword:"myverylongpasswordforthecookiesession"
     }
 }
