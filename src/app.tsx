@@ -10,7 +10,7 @@ export default function App() {
     <Router
       root={(props) => (
         <>
-          <Suspense>{props.children}</Suspense>
+          <Suspense fallback={<>Loading</>}>{props.children}</Suspense>
           <Toaster />
         </>
       )}

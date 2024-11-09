@@ -1,12 +1,14 @@
-import { RouteSectionProps } from "@solidjs/router";
+import { A, RouteSectionProps } from "@solidjs/router";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import Input from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
 import { logout, validateUser } from "~/lib/utils";
 import {
+  Bed,
   Bell,
   CircleGauge,
+  Hammer,
   Home,
   LogOut,
   PhilippinePeso,
@@ -30,6 +32,8 @@ const DashboardLayout = (props: RouteSectionProps) => {
             <ul class="space-y-2.5">
               <li>
                 <Button
+                  as={A}
+                  href="/dashboard"
                   variant={"outline"}
                   class="w-full justify-start gap-2.5"
                 >
@@ -38,6 +42,8 @@ const DashboardLayout = (props: RouteSectionProps) => {
               </li>
               <li>
                 <Button
+                  as={A}
+                  href="/dashboard/payment"
                   variant={"outline"}
                   class="w-full justify-start gap-2.5"
                 >
@@ -48,10 +54,34 @@ const DashboardLayout = (props: RouteSectionProps) => {
               <li>
                 <Button
                   variant={"outline"}
+                  as={A}
+                  href="/dashboard/tenant"
                   class="w-full justify-start gap-2.5"
                 >
                   <ScrollText size={16} />
                   Tenant
+                </Button>
+              </li>
+              <li>
+                <Button
+                  variant={"outline"}
+                  as={A}
+                  href="/dashboard/maintenance"
+                  class="w-full justify-start gap-2.5"
+                >
+                  <Hammer size={16} />
+                  Maintenance
+                </Button>
+              </li>
+              <li>
+                <Button
+                  variant={"outline"}
+                  as={A}
+                  href="/dashboard/rooms"
+                  class="w-full justify-start gap-2.5"
+                >
+                  <Bed size={16} />
+                  Rooms
                 </Button>
               </li>
             </ul>

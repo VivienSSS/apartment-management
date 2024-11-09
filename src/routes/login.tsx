@@ -1,11 +1,12 @@
 import { Button } from "~/components/ui/button";
-import { Component, createEffect } from "solid-js";
+import { Component, createEffect, Show } from "solid-js";
 import Input from "~/components/ui/input";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
 import { login } from "~/lib/utils";
 import { useSubmission } from "@solidjs/router";
 import { showToast } from "~/components/ui/toast";
+import { Loader } from "lucide-solid";
 
 const LoginPage: Component<{}> = (props) => {
   const loginResponse = useSubmission(login);
@@ -44,8 +45,23 @@ const LoginPage: Component<{}> = (props) => {
             <Label for="terms1-input">Remember Me</Label>
           </div>
         </div>
-        <Button type="submit" class="w-full">
-          Log In
+        <Button
+          disabled={loginResponse.pending}
+          variant={"default"}
+          type="submit"
+          class="w-full gap-2.5"
+        >
+          <Show
+            when={!loginResponse.pending}
+            fallback={
+              <>
+                <Loader size={16} class="animate-spin" />
+                Loading
+              </>
+            }
+          >
+            Log In
+          </Show>
         </Button>
         <p class="text-sm text-muted-foreground">
           The developers will provide you your password and username.
