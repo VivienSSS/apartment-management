@@ -1,5 +1,6 @@
 import { action, query, redirect } from "@solidjs/router";
 import { type ClassValue, clsx } from "clsx";
+
 import { twMerge } from "tailwind-merge";
 import { useSession } from "vinxi/http";
 import { config } from "~/config";
@@ -51,8 +52,8 @@ export const login = action(async (formData: FormData) => {
   }
   throw {
     code: 400,
-    message: "Invalid username or password"
-  }
+    message: "Invalid username or password",
+  };
 });
 
 export const validateUser = query(async () => {
