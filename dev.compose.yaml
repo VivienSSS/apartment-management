@@ -1,0 +1,52 @@
+services:
+  traefik:
+    image: "traefik:v3.2"
+    restart: always
+    container_name: traefik_dev
+    ports:
+      - "80:80"
+      - "443:443"
+    command:
+      - "--api.debug=true"
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.filename=/dynamic.yaml"
+      - "--providers.docker.network=web"
+      - "--providers.http.tls.insecureskipverify=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web-secured.address=:443"
+      - "--entrypoints.web-secured.http.tls=true"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`monitor.localhost`)"
+      - "traefik.http.routers.api.service=api@internal"
+      - "traefik.http.routers.api.entrypoints=web"
+    networks:
+      - web
+  pocketbase:
+    image: ghcr.io/muchobien/pocketbase:latest
+    container_name: pocketbase_dev
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pocketbase.rule=Host(`apartment.localhost`)"
+      - "traefik.http.routers.pocketbase.entrypoints=web"
+      - "traefik.http.services.pocketbase.loadbalancer.server.port=8090"
+    volumes:
+      - pocketbase_volume:/pb_data
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8090/api/health || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - web
+networks:
+  web:
+    external: true
+
+volumes:
+  pocketbase_volume:

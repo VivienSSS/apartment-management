@@ -1,7 +1,25 @@
 services:
-  app:
-    container_name: apartment-management-system
-    build: 
-      context: .
-    ports:
-      - "8001:3000"
+  pocketbase:
+    image: ghcr.io/muchobien/pocketbase:latest
+    container_name: pocketbase_dev
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pocketbase.rule=Host(`apartment.f-org-e.systems`)"
+      - "traefik.http.routers.pocketbase.entrypoints=web-secured"
+      - "traefik.http.services.pocketbase.loadbalancer.server.port=8090"
+    volumes:
+      - pocketbase_volume:/pb_data
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8090/api/health || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - web
+networks:
+  web:
+    external: true
+
+volumes:
+  pocketbase_volume:
