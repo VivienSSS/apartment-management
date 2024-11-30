@@ -7,6 +7,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.pocketbase.rule=Host(`apartment.f-org-e.systems`)"
       - "traefik.http.routers.pocketbase.entrypoints=web-secured"
+      - "traefik.http.routers.pocketbase.tls=true"
+      - "traefik.http.routers.pocketbase.tls.certresolver=cloudflare"
       - "traefik.http.services.pocketbase.loadbalancer.server.port=8090"
     volumes:
       - pocketbase_volume:/pb_data
