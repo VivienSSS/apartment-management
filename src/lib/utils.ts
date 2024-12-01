@@ -4,6 +4,8 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useSession } from "vinxi/http";
 import { config } from "~/config";
+import Pocketbase, { ClientResponseError } from "pocketbase";
+import { TypedPocketBase } from "./pocketbase-types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -26,34 +28,33 @@ export const login = action(async (formData: FormData) => {
       message: "Invalid username or password",
     };
   }
-  // check if username and password are correct
-  if (
-    config.credentials.username === username &&
-    config.credentials.password === password
-  ) {
-    // check if session data is empty
-    if (Object.keys(sessionData.data).length === 0) {
-      if (
-        sessionData.data.username === username &&
-        sessionData.data.password === password
-      ) {
-        throw redirect("/dashboard");
-      }
-    }
-    // update session data
-    await session.update((data) => {
-      data.username = username;
-      data.rememberMe = rememberMe;
-      data.password = password;
-      return data;
-    });
-    // redirect
+  const pb = new Pocketbase(process.env.POCKETBASE_URL) as TypedPocketBase;
+
+  // redirect if user is already logged in
+  console.log(sessionData.data);
+  if (Object.keys(sessionData.data).length !== 0) {
+    console.log("User is already logged in");
     throw redirect("/dashboard");
   }
-  throw {
-    code: 400,
-    message: "Invalid username or password",
-  };
+
+  try {
+    const authRecord = await pb.collection("users").authWithPassword(
+      username,
+      password,
+    );
+    // update session data
+    await session.update(authRecord);
+    console.log(authRecord);
+    throw redirect("/dashboard");
+  } catch (error) {
+    if (error instanceof ClientResponseError && error.status === 400) {
+      throw {
+        code: 400,
+        message: error.message,
+      };
+    }
+    throw error;
+  }
 });
 
 export const validateUser = query(async () => {
@@ -61,9 +62,11 @@ export const validateUser = query(async () => {
   const session = await useSession({
     password: config.credentials.sessionPassword,
   });
-  const sessionData = session;
-  if (Object.keys(sessionData.data).length === 0) {
+  const sessionData = session.data;
+  if (Object.keys(sessionData).length === 0) {
     throw redirect("/login");
+  } else {
+    throw redirect("/dashboard");
   }
 }, "validateUser");
 
@@ -72,12 +75,12 @@ export const logout = action(async () => {
   const session = useSession({
     password: config.credentials.sessionPassword,
   });
-  const sessionData = await session;
-  await sessionData.update((data) => {
-    data.username = undefined;
-    data.rememberMe = undefined;
-    data.password = undefined;
-    return data;
-  });
-  throw redirect("/login");
+  try {
+    const sessionData = await session;
+    await sessionData.clear();
+    console.log(sessionData.data);
+    throw redirect("/login");
+  } catch (error) {
+    throw error;
+  }
 }, "logout");

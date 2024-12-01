@@ -3,10 +3,14 @@ import { Component, createEffect, Show } from "solid-js";
 import Input from "~/components/ui/input";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
-import { login } from "~/lib/utils";
+import { login, validateUser } from "~/lib/utils";
 import { useSubmission } from "@solidjs/router";
 import { showToast } from "~/components/ui/toast";
 import { Loader } from "lucide-solid";
+
+export const route = {
+  preload: () => validateUser(),
+};
 
 const LoginPage: Component<{}> = (props) => {
   const loginResponse = useSubmission(login);
@@ -22,6 +26,7 @@ const LoginPage: Component<{}> = (props) => {
           });
           break;
         default:
+          console.error(errorResponse);
           showToast({
             title: `Internal server error`,
             description: `message: ${errorResponse.message}`,

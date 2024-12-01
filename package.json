@@ -29,6 +29,7 @@
     "kysely-bun-sqlite": "^0.3.2",
     "lucide-solid": "^0.454.0",
     "node-test": "^1.4.6",
+    "pocketbase": "^0.22.1",
     "postcss": "^8.4.49",
     "solid-js": "^1.9.3",
     "solid-sonner": "^0.2.8",

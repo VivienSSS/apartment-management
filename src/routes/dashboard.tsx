@@ -1,4 +1,4 @@
-import { A, RouteSectionProps } from "@solidjs/router";
+import { A, createAsync, RouteSectionProps } from "@solidjs/router";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import Input from "~/components/ui/input";
@@ -15,18 +15,22 @@ import {
   ScrollText,
   Star,
 } from "lucide-solid";
+import { getCurrentLandlordInfo } from "~/lib/db/action/landlord";
+import { Show } from "solid-js";
 
 export const route = {
   preload: () => validateUser(),
 };
 
 const DashboardLayout = (props: RouteSectionProps) => {
+
+  const landlordInfo = createAsync(() => getCurrentLandlordInfo());
+
   return (
     <main class="h-screen max-h-screen grid grid-cols-12 max-w-[1920px] container mx-auto">
       <aside class="col-span-2 p-4 border-r border-border flex flex-col justify-between">
         <div class="space-y-5">
           <h2 class="scroll-m-20 text-2xl font-semibold tracking-tight">
-            Ocampo's Apartment management
           </h2>
           <nav>
             <ul class="space-y-2.5">
@@ -102,9 +106,6 @@ const DashboardLayout = (props: RouteSectionProps) => {
         <header class="p-4 flex flex-row justify-between border-b border-border">
           <div class="flex flex-row items-center gap-5">
             <h4>{props.location.pathname}</h4>
-            <Button variant={"ghost"}>
-              <Star size={16} />
-            </Button>
           </div>
           <Input class="w-1/2" placeholder="Search something..." />
           <div class="flex flex-row gap-5">
@@ -112,11 +113,13 @@ const DashboardLayout = (props: RouteSectionProps) => {
               <Bell size={16} />
             </Button>
             <Separator orientation="vertical" />
-            <Avatar>
-              <AvatarImage />
-              <AvatarFallback>VA</AvatarFallback>
-            </Avatar>
-          </div>
+            <Show when={landlordInfo()?.record !== undefined}>
+              <Avatar>
+                <AvatarImage src={`https://apartment.f-org-e.systems/api/files/pb_users_auth/${landlordInfo()?.record.id}/${landlordInfo()?.record.avatar}`} />
+                <AvatarFallback>{landlordInfo()?.record?.firstname?.at(0)?.toUpperCase()}{landlordInfo()?.record?.lastname?.at(0)?.toUpperCase()}</AvatarFallback>
+              </Avatar>
+            </Show>
+          </div>  
         </header>
         <div class="p-4">{props.children}</div>
       </article>
