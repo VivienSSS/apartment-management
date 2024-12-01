@@ -44,11 +44,15 @@ services:
       retries: 5
     networks:
       - web
+  apartment_system:
+    build: .
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pocketbase.rule=Host(`localhost`)"
-      - "traefik.http.routers.pocketbase.entrypoints=web"
-      - "traefik.http.services.pocketbase.loadbalancer.server.port=8090"
+      - "traefik.http.routers.apartment_system.rule=Host(`apartments.localhost`)"
+      - "traefik.http.routers.apartment_system.entrypoints=web"
+      - "traefik.http.services.apartment_system.loadbalancer.server.port=3000"
+    networks:
+      - web
 
 networks:
   web:
