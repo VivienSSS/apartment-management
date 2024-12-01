@@ -23,7 +23,7 @@ services:
     build: .
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.apartment_system.rule=Host(`apartment-sys.f-org-e.systems`)"
+      - "traefik.http.routers.apartment_system.rule=Host(`ams.f-org-e.systems`)"
       - "traefik.http.routers.apartment_system.entrypoints=web-secured"
       - "traefik.http.routers.apartment_system.tls=true"
       - "traefik.http.routers.apartment_system.tls.certresolver=cloudflare"
