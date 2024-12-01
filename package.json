@@ -20,7 +20,6 @@
     "@solidjs/router": "^0.15.1",
     "@solidjs/start": "^1.0.10",
     "autoprefixer": "^10.4.20",
-    "better-sqlite3": "^11.5.0",
     "chart.js": "^4.4.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
