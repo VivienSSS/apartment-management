@@ -1,7 +1,6 @@
 services:
   pocketbase:
     image: ghcr.io/muchobien/pocketbase:latest
-    container_name: pocketbase_dev
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -28,6 +27,8 @@ services:
       - "traefik.http.routers.apartment_system.tls=true"
       - "traefik.http.routers.apartment_system.tls.certresolver=cloudflare"
       - "traefik.http.services.apartment_system.loadbalancer.server.port=3000"
+    env_file:
+      - stack.env
     networks:
       - web
 networks:
