@@ -24,8 +24,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pocketbase.rule=Host(`apartment-sys.f-org-e.systems`)"
-      - "traefik.http.routers.pocketbase.entrypoints=web"
+      - "traefik.http.routers.pocketbase.entrypoints=web-secured"
+      - "traefik.http.routers.pocketbase.tls=true"
+      - "traefik.http.routers.pocketbase.tls.certresolver=cloudflare"
       - "traefik.http.services.pocketbase.loadbalancer.server.port=3000"
+    networks:
+      - web
 networks:
   web:
     external: true
