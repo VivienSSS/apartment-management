@@ -19,6 +19,13 @@ services:
       retries: 5
     networks:
       - web
+  apartment_system:
+    build: .
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pocketbase.rule=Host(`apartment-sys.f-org-e.systems`)"
+      - "traefik.http.routers.pocketbase.entrypoints=web"
+      - "traefik.http.services.pocketbase.loadbalancer.server.port=3000"
 networks:
   web:
     external: true

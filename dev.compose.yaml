@@ -44,6 +44,12 @@ services:
       retries: 5
     networks:
       - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pocketbase.rule=Host(`localhost`)"
+      - "traefik.http.routers.pocketbase.entrypoints=web"
+      - "traefik.http.services.pocketbase.loadbalancer.server.port=8090"
+
 networks:
   web:
     external: true
