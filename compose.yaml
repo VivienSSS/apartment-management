@@ -19,7 +19,9 @@ services:
     networks:
       - web
   apartment_system:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.apartment_system.rule=Host(`ams.f-org-e.systems`)"
