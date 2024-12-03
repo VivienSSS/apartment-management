@@ -31,7 +31,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { getAllRooms } from "~/lib/db/action/rooms";
+import { getAllRooms, insertRoom } from "~/lib/db/action/rooms";
 import Input from "~/components/ui/input";
 import { Toggle } from "~/components/ui/toggle";
 import {
@@ -40,6 +40,8 @@ import {
   SwitchLabel,
   SwitchThumb,
 } from "~/components/ui/switch";
+import { Label } from "~/components/ui/label";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
 
 export const route = {
   preload: () => getAllRooms(),
@@ -47,86 +49,79 @@ export const route = {
 
 const RoomsPage: Component<{}> = (props) => {
   const rooms = createAsync(() => getAllRooms());
-
   return (
-    <div>
-      <div class="flex flex-row items-center justify-between py-4">
-        <h2 class="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-          Rooms
-        </h2>
-      </div>
-      <div class="grid grid-cols-4 gap-2.5">
-        <For each={rooms()}>
-          {(room) => (
-            <Card>
-              <CardHeader>
-                <CardTitle class="flex flex-row items-center gap-2.5">
-                  <h4>Room {room.letter}</h4>
-                  <Dot class="w-fit" size={16} />
-                  <span class="text-sm text-muted-foreground">
-                    {room.status}
-                  </span>
-                </CardTitle>
-                <div class="flex flex-row items-center gap-2.5">
-                  <PhilippinePeso size={16} />
-                  <CardDescription class="scroll-m-20 text-xl font-semibold tracking-tight">
-                    {room.rentAmount}
-                  </CardDescription>
-                </div>
-              </CardHeader>
-              <CardFooter class="gap-2.5">
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Button variant={"default"} size={"sm"}>
-                      <DoorOpen size={16} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Visit Room</TooltipContent>
-                </Tooltip>
-                <Dialog>
-                  <DialogTrigger>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Button variant={"ghost"} size={"sm"}>
-                          <Info size={16} />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>More Info</TooltipContent>
-                    </Tooltip>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>{room.rentAmount}</DialogTitle>
-                      <DialogDescription>{room.status}</DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-              </CardFooter>
-            </Card>
-          )}
-        </For>
+    <article class="space-y-5">
+      <h2 class="border-b scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+        Rooms
+      </h2>
+      <div class="flex flex-row justify-end">
         <Dialog>
-          <DialogTrigger class="h-full">
-            <Card class="h-full flex flex-col justify-center items-center text-muted-foreground gap-2.5">
-              <PlusCircle size={24} />
-              Add Room
-            </Card>
+          <DialogTrigger class="">
+            <Button>Add Room</Button>
           </DialogTrigger>
-          <DialogContent class="h-[90%] w-full">
-            <form action="" class="space-y-2.5 py-4">
-              <Input placeholder="name" />
-              <Input placeholder="name" />
-              <Switch class="flex items-center space-x-2">
-                <SwitchLabel>Status</SwitchLabel>
-                <SwitchControl>
-                  <SwitchThumb />
-                </SwitchControl>
-              </Switch>
+          <DialogContent class="max-w-7xl">
+            <DialogHeader>
+              <DialogTitle>Create room</DialogTitle>
+              <DialogDescription>
+                Fill the required information below
+              </DialogDescription>
+            </DialogHeader>
+            <form action={insertRoom} class="space-y-5" method="post">
+              <div>
+                <Label>Unit name</Label>
+                <Input type="text" name="unit_name" placeholder="ex. Unit A" />
+              </div>
+              <div>
+                <Label>Floor number</Label>
+                <Input type="number" name="floor_number" placeholder="ex. 14" />
+              </div>
+              <div>
+                <Label>Building number</Label>
+                <Input type="number" name="building_number" placeholder="ex. 1" />
+              </div>
+              <div class="grid grid-cols-2 gap-5">
+                <div>
+                  <Label>Price</Label>
+                  <Input type="number" name="price" placeholder="ex. 1" />
+                </div>
+                <div>
+                  <Label>Capacity</Label>
+                  <Input type="number" name="capacity" placeholder="ex. 4" min={1} max={6} />
+                </div>     
+              </div>
+              <DialogFooter>
+                <Button variant="outline">Cancel</Button>
+                <Button type="submit" variant="default">Create</Button>
+              </DialogFooter>
             </form>
           </DialogContent>
         </Dialog>
       </div>
-    </div>
+      <Table class="border">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Unit name</TableHead>
+            <TableHead>Floor number</TableHead>
+            <TableHead>Building number</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Capacity</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <For each={rooms()?.items} fallback={<div>Loading...</div>}>
+            {(room) => (
+              <TableRow>
+                <TableCell>{room.unit_name}</TableCell>
+                <TableCell>{room.floor_number}</TableCell>
+                <TableCell>{room.bldg_number}</TableCell>
+                <TableCell>{room.price}</TableCell>
+                <TableCell>{room.capacity}</TableCell>
+              </TableRow>
+            )}
+          </For>
+        </TableBody>
+      </Table>
+    </article>
   );
 };
 

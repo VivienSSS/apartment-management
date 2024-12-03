@@ -30,8 +30,6 @@ export const login = action(async (formData: FormData) => {
   }
   const pb = new Pocketbase(process.env.POCKETBASE_URL) as TypedPocketBase;
 
-  // redirect if user is already logged in
-  console.log(sessionData.data);
   if (Object.keys(sessionData.data).length !== 0) {
     console.log("User is already logged in");
     throw redirect("/dashboard");

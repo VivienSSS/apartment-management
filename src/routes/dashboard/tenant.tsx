@@ -27,9 +27,11 @@ const TenantPage: Component<{}> = (props) => {
   const [rawValue, setRawValue] = createSignal<number>();
   const tenants = createAsync(() => getAllTenants());
   return (
-    <article>
+    <article class="space-y-5">
+      <h2 class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">Tenants</h2>
+      <div class="flex flex-row justify-end">
       <Dialog>
-        <DialogTrigger>
+        <DialogTrigger class="">
           <Button>Create tenant</Button>
         </DialogTrigger>
         <DialogContent class="max-w-7xl">
@@ -92,8 +94,9 @@ const TenantPage: Component<{}> = (props) => {
             </DialogFooter>
           </form>
         </DialogContent>
-      </Dialog>
-      <Table>
+        </Dialog>
+      </div>
+      <Table class="border">
         <TableHeader>
           <TableRow>
             <TableHead>email</TableHead>

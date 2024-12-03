@@ -102,7 +102,7 @@ const DashboardLayout = (props: RouteSectionProps) => {
           </Button>
         </form>
       </aside>
-      <article class="col-span-10">
+      <div class="col-span-10 overflow-y-auto">
         <header class="p-4 flex flex-row justify-between border-b border-border">
           <div class="flex flex-row items-center gap-5">
             <h4>{props.location.pathname}</h4>
@@ -122,7 +122,7 @@ const DashboardLayout = (props: RouteSectionProps) => {
           </div>  
         </header>
         <div class="p-4">{props.children}</div>
-      </article>
+      </div>
     </main>
   );
 };
