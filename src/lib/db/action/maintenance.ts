@@ -1,6 +1,11 @@
-import { action, query } from "@solidjs/router";
+import { action, query, redirect } from "@solidjs/router";
 import Pocketbase from "pocketbase";
-import { ScheduleTblResponse, TypedPocketBase } from "~/lib/pocketbase-types";
+import {
+    RoomsTblRecord,
+    ScheduleTblResponse,
+    TypedPocketBase,
+    UsersRecord,
+} from "~/lib/pocketbase-types";
 import { useSession } from "vinxi/http";
 import { config } from "~/config";
 
@@ -13,15 +18,20 @@ export const getAllMaintenanceSchedule = query(
         const session = await useSession({
             password: config.credentials.sessionPassword,
         });
-
         const { token } = session.data as {
             token: string;
         };
         pb.authStore.save(token, session.data.record);
         try {
             const schedules = await pb.collection("schedule_tbl").getList<
-                ScheduleTblResponse
-            >(1, 50);
+                ScheduleTblResponse<{
+                    user: UsersRecord;
+                    room: RoomsTblRecord;
+                }>
+            >(1, 50, {
+                expand: "user,room",
+                sort: "scheduled_date",
+            });
             return schedules;
         } catch (error) {
             console.error(error);

@@ -16,6 +16,8 @@ export const insertTenant = action(async (form: FormData): Promise<void> => {
         middlename: form.get("middlename") as string,
         lastname: form.get("lastname") as string,
         age: form.get("age") as string,
+        fb_name: form.get("fb_name") as string,
+        contact_number: form.get("contact_number") as string,
         password: "asfdhjkasfdkjhjfahwef",
         passwordConfirm: "asfdhjkasfdkjhjfahwef",
         role: "tenant",

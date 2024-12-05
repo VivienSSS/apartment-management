@@ -7,26 +7,25 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 const PaymentPage: Component<{}> = (props) => {
   return (
-    <div class="grid grid-cols-3 gap-2.5">
-      <Card>
-        <CardHeader>
-          <CardTitle>Rent Payment</CardTitle>
-        </CardHeader>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Utility Payment</CardTitle>
-        </CardHeader>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Maintenace Payment</CardTitle>
-        </CardHeader>
-      </Card>
-    </div>
+    <article class="space-y-5">
+      <h2 class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">Payments</h2>
+      <Tabs>
+        <TabsList class="w-full flex justify-start">
+          <TabsTrigger value="rentPayment">Rent payment</TabsTrigger>
+          <TabsTrigger value="utilityPayment">Utility payment</TabsTrigger>
+          <TabsTrigger value="maintenancePayment">
+            Maintenance payment
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="rentPayment">Rent payment</TabsContent>
+        <TabsContent value="utilityPayment">Utility Payment</TabsContent>
+        <TabsContent value="maintenancePayment">Maintenance Payment</TabsContent>
+      </Tabs>
+    </article>
   );
 };
 

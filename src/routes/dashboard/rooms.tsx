@@ -90,7 +90,6 @@ const RoomsPage: Component<{}> = (props) => {
                 </div>     
               </div>
               <DialogFooter>
-                <Button variant="outline">Cancel</Button>
                 <Button type="submit" variant="default">Create</Button>
               </DialogFooter>
             </form>
