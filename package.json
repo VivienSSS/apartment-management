@@ -11,6 +11,7 @@
     "db:types": "kysely-codegen"
   },
   "dependencies": {
+    "@ark-ui/solid": "^4.5.1",
     "@corvu/drawer": "^0.2.2",
     "@corvu/otp-field": "^0.1.4",
     "@corvu/resizable": "^0.2.3",
@@ -20,11 +21,11 @@
     "@solidjs/router": "^0.15.1",
     "@solidjs/start": "^1.0.10",
     "autoprefixer": "^10.4.20",
-    "chart.js": "^4.4.6",
+    "chart.js": "^4.4.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk-solid": "^1.1.0",
-    "embla-carousel-solid": "^8.3.1",
+    "embla-carousel-solid": "^8.5.1",
     "kysely-bun-sqlite": "^0.3.2",
     "lucide-solid": "^0.454.0",
     "node-test": "^1.4.6",

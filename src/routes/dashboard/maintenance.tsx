@@ -160,17 +160,17 @@ const MaintenancePage: Component<{}> = (props) => {
                   type="text"
                   name="tenant_id"
                   class="hidden"
-                  value={tenants()?.items.filter(
+                  value={tenants()?.items.map(
                     (val) => {
                       if (
                         tenant()?.includes(
                           `${val.firstname} ${val.middlename} ${val.lastname}`,
                         )
                       ) {
-                        return true
+                        return val.id;
                       }
                     },
-                  )[0].id}
+                  ).filter(Boolean)[0]}
                 />
               </div>
               <div>

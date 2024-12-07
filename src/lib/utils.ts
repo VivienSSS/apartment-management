@@ -76,8 +76,6 @@ export const logout = action(async () => {
   try {
     const sessionData = await session;
     await sessionData.clear();
-    console.log(sessionData.data);
-    throw redirect("/login");
   } catch (error) {
     throw error;
   }
