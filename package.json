@@ -26,7 +26,6 @@
     "clsx": "^2.1.1",
     "cmdk-solid": "^1.1.0",
     "embla-carousel-solid": "^8.5.1",
-    "kysely-bun-sqlite": "^0.3.2",
     "lucide-solid": "^0.454.0",
     "node-test": "^1.4.6",
     "pocketbase": "^0.22.1",

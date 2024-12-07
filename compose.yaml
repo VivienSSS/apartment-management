@@ -29,8 +29,6 @@ services:
       - "traefik.http.routers.apartment_system.tls=true"
       - "traefik.http.routers.apartment_system.tls.certresolver=cloudflare"
       - "traefik.http.services.apartment_system.loadbalancer.server.port=3000"
-    env_file:
-      - stack.env
     networks:
       - web
 networks:
