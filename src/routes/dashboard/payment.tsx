@@ -1,5 +1,5 @@
 import { HandCoins, PlusCircle, Wallet } from "lucide-solid";
-import { Component } from "solid-js";
+import { Component, For } from "solid-js";
 import {
   Card,
   CardContent,
@@ -31,8 +31,12 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import Input from "~/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
+import { createAsync } from "@solidjs/router";
+import { getAllRentPayment } from "~/lib/db/action/payment";
 
 const PaymentPage: Component<{}> = (props) => {
+  const billingInfo = createAsync(() => getAllRentPayment());
+
   return (
     <article class="space-y-5">
       <h2 class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
@@ -114,16 +118,73 @@ const PaymentPage: Component<{}> = (props) => {
           <Table class="border space-y-2">
             <TableHeader>
               <TableRow>
-                <TableHead>Total</TableHead>
-                <TableHead>From</TableHead>
-                <TableHead>To</TableHead>
-                <TableHead>Utility type</TableHead>
-                <TableHead>Room ID</TableHead>
+                <TableHead>Room Name</TableHead>
+                <TableHead>Tenant Email</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Deadline</TableHead>
               </TableRow>
             </TableHeader>
+            <TableBody>
+              <For each={billingInfo()}>
+                {(bill) => (
+                  <TableRow>
+                    <TableCell>
+                      {bill.expand?.billing_info.expand?.room_info?.unit_name}
+                    </TableCell>
+                    <TableCell>
+                      {bill.expand?.to_user?.fb_name ||
+                        bill.expand?.to_user?.email}
+                    </TableCell>
+                    <TableCell>
+                      {bill.expand?.billing_info.expand?.room_info?.price}
+                    </TableCell>
+                    <TableCell>{bill.deadline}</TableCell>
+                  </TableRow>
+                )}
+              </For>
+            </TableBody>
           </Table>
         </TabsContent>
-        <TabsContent value="utilityPayment">Utility Payment</TabsContent>
+        <TabsContent value="utilityPayment">
+          <Table class="border space-y-2">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Room Name</TableHead>
+                <TableHead>Tenant Email</TableHead>
+                <TableHead>Utility Type</TableHead>
+                <TableHead>From</TableHead>
+                <TableHead>To</TableHead>
+                <TableHead>Total</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {billingInfo()?.map((bill) => {
+                return (
+                  <For each={bill.expand?.billing_info.expand?.utilities}>
+                    {(utility) => {
+                      return (
+                        <TableRow>
+                          <TableCell>
+                            {bill.expand?.billing_info.expand?.room_info
+                              ?.unit_name}
+                          </TableCell>
+                          <TableCell>
+                            {bill.expand?.to_user?.fb_name ||
+                              bill.expand?.to_user?.email}
+                          </TableCell>
+                          <TableCell>{utility.utility_type}</TableCell>
+                          <TableCell>{utility.from}</TableCell>
+                          <TableCell>{utility.to}</TableCell>
+                          <TableCell>{utility.total}</TableCell>
+                        </TableRow>
+                      );
+                    }}
+                  </For>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TabsContent>
         <TabsContent value="maintenancePayment">
           Maintenance Payment
         </TabsContent>

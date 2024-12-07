@@ -80,3 +80,20 @@ export const logout = action(async () => {
     throw error;
   }
 }, "logout");
+
+export const getPocketbase = async () => {
+  "use server";
+  const pb = new Pocketbase(
+    process.env.POCKETBASE_URL,
+  ) as TypedPocketBase;
+  const session = await useSession({
+    password: config.credentials.sessionPassword,
+  });
+
+  const { token } = session.data as {
+    token: string;
+  };
+
+  pb.authStore.save(token, session.data.record);
+  return pb;
+};

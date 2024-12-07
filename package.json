@@ -4,11 +4,7 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "start": "vinxi start",
-    "db:generate": "kysely migrate make -x ts",
-    "db:up": "kysely migrate up",
-    "db:down": "kysely migrate down",
-    "db:types": "kysely-codegen"
+    "start": "vinxi start"
   },
   "dependencies": {
     "@ark-ui/solid": "^4.5.1",
