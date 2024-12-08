@@ -1,4 +1,4 @@
-FROM oven/bun:1 AS base
+FROM oven/bun:canary-alpine AS base
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ RUN bun install
 
 RUN bun run build
 
-FROM oven/bun:1 AS production
+FROM oven/bun:canary-alpine AS production
 
 WORKDIR /app
 
