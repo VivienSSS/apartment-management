@@ -1,7 +1,5 @@
 FROM oven/bun:canary-alpine AS production
 
-WORKDIR /app
-
 COPY . .
 
 EXPOSE 3000

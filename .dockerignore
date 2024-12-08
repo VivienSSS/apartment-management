@@ -1,7 +1,6 @@
 
 dist
 .solid
-.output
 .vercel
 .netlify
 .vinxi
