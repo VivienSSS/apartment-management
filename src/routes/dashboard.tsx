@@ -6,8 +6,6 @@ import {
 } from "@solidjs/router";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button, buttonVariants } from "~/components/ui/button";
-import Input from "~/components/ui/input";
-import { Separator } from "~/components/ui/separator";
 import { logout, validateUser } from "~/lib/utils";
 import {
   Bed,
