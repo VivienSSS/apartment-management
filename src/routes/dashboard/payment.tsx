@@ -1,17 +1,9 @@
 import { HandCoins, PlusCircle, Wallet } from "lucide-solid";
-import { Component, For } from "solid-js";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Component, createSignal, For, Show } from "solid-js";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -32,94 +24,325 @@ import { Label } from "~/components/ui/label";
 import Input from "~/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { createAsync } from "@solidjs/router";
-import { getAllRentPayment } from "~/lib/db/action/payment";
+import {
+  getAllRentPayment,
+  insertBillingPayment,
+} from "~/lib/db/action/payment";
+import { getAllTenants } from "~/lib/db/action/tenant";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import { getAllRooms } from "~/lib/db/action/rooms";
+import { Toggle } from "~/components/ui/toggle";
 
 const PaymentPage: Component<{}> = (props) => {
   const billingInfo = createAsync(() => getAllRentPayment());
+  const tenants = createAsync(() => getAllTenants());
+  const rooms = createAsync(() => getAllRooms());
+  const [tenantName, setTenantName] = createSignal<string>("");
+  const [roomName, setRoomName] = createSignal<string>("");
+  const [currentPaymentMethod, setCurrentPaymentMethod] = createSignal<
+    string
+  >();
 
   return (
     <article class="space-y-5">
       <h2 class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
         Payments
       </h2>
+      <div class="flex flex-row justify-end gap-2.5">
+        <Dialog>
+          <DialogTrigger class="">
+            <Button>Create Bill</Button>
+          </DialogTrigger>
+          <DialogContent class="max-w-2x2">
+            <DialogHeader>
+              <DialogTitle>Create Bill</DialogTitle>
+              <DialogDescription>
+                Add tenants and specify their payment details
+              </DialogDescription>
+            </DialogHeader>
+            <form class="space-y-3" action={insertBillingPayment} method="post">
+              <div>
+                <span class="small">Tenant</span>
+                <Show when={tenantName() !== undefined}>
+                  <Select
+                    value={tenantName()}
+                    onChange={setTenantName}
+                    options={tenants()?.items.map((val) =>
+                      `${val.firstname} ${val.middlename} ${val.lastname}`
+                    ) as string[]}
+                    itemComponent={(props) => (
+                      <SelectItem item={props.item}>
+                        {props.item.textValue}
+                      </SelectItem>
+                    )}
+                  >
+                    <SelectTrigger>
+                      <SelectValue<string>>
+                        {(state) => state.selectedOption()}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent />
+                  </Select>
+                </Show>
+                {tenantName() && (
+                  <input
+                    type="hidden"
+                    name="tenant"
+                    value={tenants()?.items.map(
+                      (val) => {
+                        if (
+                          tenantName()?.includes(
+                            `${val.firstname} ${val.middlename} ${val.lastname}`,
+                          )
+                        ) {
+                          return val.id;
+                        }
+                      },
+                    ).filter(Boolean)[0]}
+                  />
+                )}
+              </div>
+              <div>
+                <span class="small">Room</span>
+                <Show when={roomName() !== undefined}>
+                  <Select
+                    value={roomName()}
+                    onChange={setRoomName}
+                    options={rooms()?.items.map((val) =>
+                      val.unit_name
+                    ) as string[]}
+                    itemComponent={(props) => (
+                      <SelectItem item={props.item}>
+                        {props.item.textValue}
+                      </SelectItem>
+                    )}
+                  >
+                    <SelectTrigger>
+                      <SelectValue<string>>
+                        {(state) => state.selectedOption()}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent />
+                  </Select>
+                </Show>
+                {roomName() && (
+                  <input
+                    type="hidden"
+                    name="room"
+                    value={rooms()?.items.map((val) => {
+                      if (roomName()?.includes(val.unit_name)) return val.id;
+                    }).filter(Boolean)[0]}
+                  />
+                )}
+              </div>
+              <div>
+                <span class="small">Electricity</span>
+                <div class="grid grid-cols-3 gap-2.5">
+                  <div>
+                    <Label>
+                      Total
+                    </Label>
+                    <Input type="number" name="electricity-bill" />
+                  </div>
+                  <div>
+                    <Label>
+                      From
+                    </Label>
+                    <Input type="date" name="electricity-deadline-from" />
+                  </div>
+                  <div>
+                    <Label>
+                      To
+                    </Label>
+                    <Input type="date" name="electricity-deadline-to" />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <span class="small">Water</span>
+                <div class="grid grid-cols-3 gap-2.5">
+                  <div>
+                    <Label>
+                      Total
+                    </Label>
+                    <Input type="number" name="water-bill" />
+                  </div>
+                  <div>
+                    <Label>
+                      From
+                    </Label>
+                    <Input type="date" name="water-deadline-from" />
+                  </div>
+                  <div>
+                    <Label>
+                      To
+                    </Label>
+                    <Input type="date" name="water-deadline-to" />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <Label>
+                  Deadline
+                </Label>
+                <Input type="date" name="deadline" />
+              </div>
+              <DialogFooter>
+                <Button
+                  type="submit"
+                  onClick={() => window.location.href = "/dashboard/payment"}
+                  variant="default"
+                >
+                  Create
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+        <Dialog>
+          <DialogTrigger class="">
+            <Button>Create Trasaction</Button>
+          </DialogTrigger>
+          <DialogContent class="max-w-2x2">
+            <DialogHeader>
+              <DialogTitle>Create Trasaction</DialogTitle>
+              <DialogDescription>
+                Add tenants and specify their payment details
+              </DialogDescription>
+            </DialogHeader>
+            <form class="space-y-3" action={insertBillingPayment} method="post">
+              <div>
+                <span class="small">Payment method</span>
+                <ToggleGroup class="flex justify-start">
+                  <ToggleGroupItem
+                    name="payment-method"
+                    onClick={() => setCurrentPaymentMethod("cash")}
+                    value="cash"
+                    class="flex flex-row gap-2.5"
+                  >
+                    <HandCoins size={16} /> CASH
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value="gcash"
+                    name="payment-method"
+                    onClick={() => setCurrentPaymentMethod("gcash")}
+                    class="flex flex-row gap-2.5"
+                  >
+                    <Wallet size={16} /> G-CASH
+                  </ToggleGroupItem>
+                </ToggleGroup>
+                {currentPaymentMethod() && (
+                  <input
+                    type="hidden"
+                    name="payment-method"
+                    value={currentPaymentMethod()}
+                  />
+                )}
+              </div>
+              <div>
+                <span class="small">Tenant</span>
+                <Show when={tenantName() !== undefined}>
+                  <Select
+                    value={tenantName()}
+                    onChange={setTenantName}
+                    options={tenants()?.items.map((val) =>
+                      `${val.firstname} ${val.middlename} ${val.lastname}`
+                    ) as string[]}
+                    itemComponent={(props) => (
+                      <SelectItem item={props.item}>
+                        {props.item.textValue}
+                      </SelectItem>
+                    )}
+                  >
+                    <SelectTrigger>
+                      <SelectValue<string>>
+                        {(state) => state.selectedOption()}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent />
+                  </Select>
+                </Show>
+                {tenantName() && (
+                  <input
+                    type="hidden"
+                    name="tenant"
+                    value={tenants()?.items.map(
+                      (val) => {
+                        if (
+                          tenantName()?.includes(
+                            `${val.firstname} ${val.middlename} ${val.lastname}`,
+                          )
+                        ) {
+                          return val.id;
+                        }
+                      },
+                    ).filter(Boolean)[0]}
+                  />
+                )}
+              </div>
+              <div>
+                <span class="small">Room</span>
+                <Show when={roomName() !== undefined}>
+                  <Select
+                    value={roomName()}
+                    onChange={setRoomName}
+                    options={rooms()?.items.map((val) =>
+                      val.unit_name
+                    ) as string[]}
+                    itemComponent={(props) => (
+                      <SelectItem item={props.item}>
+                        {props.item.textValue}
+                      </SelectItem>
+                    )}
+                  >
+                    <SelectTrigger>
+                      <SelectValue<string>>
+                        {(state) => state.selectedOption()}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent />
+                  </Select>
+                </Show>
+              </div>
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <Label>
+                    Electricity
+                  </Label>
+                  <Input type="number" name="electricity-bill" />
+                </div>
+                <div>
+                  <Label>
+                    Water
+                  </Label>
+                  <Input type="number" name="water-bill" />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit" variant="default">Create</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
       <Tabs>
         <TabsList class="w-full flex justify-start">
           <TabsTrigger value="rentPayment">Rent payment</TabsTrigger>
           <TabsTrigger value="utilityPayment">Utility payment</TabsTrigger>
-          <TabsTrigger value="maintenancePayment">
-            Maintenance payment
-          </TabsTrigger>
+          <TabsTrigger value="paymentSchedule">Payment Schedule</TabsTrigger>
         </TabsList>
         <TabsContent value="rentPayment" class="space-y-5 pt-5">
-          <div class="flex flex-row justify-end">
-            <Dialog>
-              <DialogTrigger class="">
-                <Button>Add Tenant</Button>
-              </DialogTrigger>
-              <DialogContent class="max-w-2x2">
-                /*starting of the dialog content, big square*/
-                <DialogHeader>
-                  <DialogTitle>Add Tenant</DialogTitle>
-                  <DialogDescription>
-                    Add tenants and specify their payment details
-                  </DialogDescription>
-                </DialogHeader>
-                <form class="space-y-3" method="post">
-                  <div>
-                    <Label>Payment method</Label>
-                    <ToggleGroup>
-                      <ToggleGroupItem value="a" class="flex flex-row gap-2.5">
-                        <HandCoins size={16} /> CASH
-                      </ToggleGroupItem>
-                      <ToggleGroupItem value="b" class="flex flex-row gap-2.5">
-                        <Wallet size={16} /> G-CASH
-                      </ToggleGroupItem>
-                    </ToggleGroup>
-                  </div>
-                  <div>
-                    <Label>Floor number</Label>
-                    <Input
-                      type="number"
-                      name="floor_number"
-                      placeholder="ex. 14"
-                    />
-                  </div>
-                  <div>
-                    <Label>Building number</Label>
-                    <Input
-                      type="number"
-                      name="building_number"
-                      placeholder="ex. 1"
-                    />
-                  </div>
-                  <div class="grid grid-cols-2 gap-5">
-                    <div>
-                      <Label>Price</Label>
-                      <Input type="number" name="price" placeholder="ex. 1" />
-                    </div>
-                    <div>
-                      <Label>Capacity</Label>
-                      <Input
-                        type="number"
-                        name="capacity"
-                        placeholder="ex. 4"
-                        min={1}
-                        max={6}
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button type="submit" variant="default">Create</Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
-          </div>
           <Table class="border space-y-2">
             <TableHeader>
               <TableRow>
                 <TableHead>Room Name</TableHead>
-                <TableHead>Tenant Email</TableHead>
+                <TableHead>Tenant Email / Name</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead>Deadline</TableHead>
               </TableRow>
@@ -150,7 +373,7 @@ const PaymentPage: Component<{}> = (props) => {
             <TableHeader>
               <TableRow>
                 <TableHead>Room Name</TableHead>
-                <TableHead>Tenant Email</TableHead>
+                <TableHead>Tenant Email / Name</TableHead>
                 <TableHead>Utility Type</TableHead>
                 <TableHead>From</TableHead>
                 <TableHead>To</TableHead>
@@ -185,8 +408,41 @@ const PaymentPage: Component<{}> = (props) => {
             </TableBody>
           </Table>
         </TabsContent>
-        <TabsContent value="maintenancePayment">
-          Maintenance Payment
+        <TabsContent value="paymentSchedule">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Room Name</TableHead>
+                <TableHead>Tenant Email / Name</TableHead>
+                <TableHead>Deadline</TableHead>
+                <TableHead>Total Bill</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {billingInfo()?.map((bill) => {
+                let utilityTotal = bill.expand?.billing_info.expand?.utilities
+                  .map((
+                    v,
+                  ) => v.total).reduce((a, b) => a + b, 0) as number;
+                const rentPrice =
+                  bill.expand?.billing_info.expand?.room_info?.price || 0;
+                let total = utilityTotal + rentPrice;
+                return (
+                  <TableRow>
+                    <TableCell>
+                      {bill.expand?.billing_info.expand?.room_info?.unit_name}
+                    </TableCell>
+                    <TableCell>
+                      {bill.expand?.to_user?.fb_name ||
+                        bill.expand?.to_user?.email}
+                    </TableCell>
+                    <TableCell>{bill.deadline}</TableCell>
+                    <TableCell>{total}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
         </TabsContent>
       </Tabs>
     </article>

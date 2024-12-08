@@ -1,4 +1,4 @@
-import { query } from "@solidjs/router";
+import { action, query } from "@solidjs/router";
 import {
     BillingInfoUtilitiesDateTblRecord,
     BillingTblResponse,
@@ -29,3 +29,44 @@ export const getAllRentPayment = query(async () => {
         console.error(error);
     }
 }, "getAllRentPayment");
+
+export const insertBillingPayment = action(async (form: FormData) => {
+    "use server";
+
+    // send utility payment and get their id
+    const pb = await getPocketbase();
+
+    const electricityBill = {
+        total: form.get("electricity-bill"),
+        from: form.get("electricity-deadline-from"),
+        to: form.get("electricity-deadline-to"),
+        utility_type: "electricity",
+    };
+
+    const roomID = form.get("room");
+    const tenantID = form.get("tenant");
+
+    const waterBill = {
+        total: form.get("water-bill"),
+        from: form.get("water-deadline-from"),
+        to: form.get("water-deadline-to"),
+        utility_type: "water",
+    };
+
+    const dbElectricityBill = await pb.collection(
+        "billing_info_utilities_date_tbl",
+    ).create(electricityBill);
+    const dbWaterBill = await pb.collection("billing_info_utilities_date_tbl")
+        .create(waterBill);
+
+    const billingInfo = await pb.collection("billing_info_tbl").create({
+        room_info: roomID,
+        utilities: [dbElectricityBill.id, dbWaterBill.id],
+    });
+
+    await pb.collection("billing_tbl").create({
+        deadline: form.get("deadline"),
+        billing_info: billingInfo.id,
+        to_user: tenantID,
+    });
+});
