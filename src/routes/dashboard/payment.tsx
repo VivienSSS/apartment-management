@@ -367,23 +367,25 @@ const PaymentPage: Component<{}> = (props) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <For each={billingInfo()}>
-                {(bill) => (
-                  <TableRow>
-                    <TableCell>
-                      {bill.expand?.billing_info.expand?.room_info?.unit_name}
-                    </TableCell>
-                    <TableCell>
-                      {bill.expand?.to_user?.fb_name ||
-                        bill.expand?.to_user?.email}
-                    </TableCell>
-                    <TableCell>
-                      {bill.expand?.billing_info.expand?.room_info?.price}
-                    </TableCell>
-                    <TableCell>{bill.deadline}</TableCell>
-                  </TableRow>
-                )}
-              </For>
+              <Show when={billingInfo() !== undefined}>
+                <For each={billingInfo()}>
+                  {(bill) => (
+                    <TableRow>
+                      <TableCell>
+                        {bill.expand?.billing_info.expand?.room_info?.unit_name}
+                      </TableCell>
+                      <TableCell>
+                        {bill.expand?.to_user?.fb_name ||
+                          bill.expand?.to_user?.email}
+                      </TableCell>
+                      <TableCell>
+                        {bill.expand?.billing_info.expand?.room_info?.price}
+                      </TableCell>
+                      <TableCell>{bill.deadline}</TableCell>
+                    </TableRow>
+                  )}
+                </For>
+              </Show>
             </TableBody>
           </Table>
         </TabsContent>
@@ -400,30 +402,34 @@ const PaymentPage: Component<{}> = (props) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {billingInfo()?.map((bill) => {
-                return (
-                  <For each={bill.expand?.billing_info.expand?.utilities}>
-                    {(utility) => {
-                      return (
-                        <TableRow>
-                          <TableCell>
-                            {bill.expand?.billing_info.expand?.room_info
-                              ?.unit_name}
-                          </TableCell>
-                          <TableCell>
-                            {bill.expand?.to_user?.fb_name ||
-                              bill.expand?.to_user?.email}
-                          </TableCell>
-                          <TableCell>{utility.utility_type}</TableCell>
-                          <TableCell>{utility.from}</TableCell>
-                          <TableCell>{utility.to}</TableCell>
-                          <TableCell>{utility.total}</TableCell>
-                        </TableRow>
-                      );
-                    }}
-                  </For>
-                );
-              })}
+              <Show when={billingInfo() !== undefined}>
+                <For each={billingInfo()}>
+                  {(bill) => {
+                    return (
+                      <For each={bill.expand?.billing_info.expand?.utilities}>
+                        {(utility) => {
+                          return (
+                            <TableRow>
+                              <TableCell>
+                                {bill.expand?.billing_info.expand?.room_info
+                                  ?.unit_name}
+                              </TableCell>
+                              <TableCell>
+                                {bill.expand?.to_user?.fb_name ||
+                                  bill.expand?.to_user?.email}
+                              </TableCell>
+                              <TableCell>{utility.utility_type}</TableCell>
+                              <TableCell>{utility.from}</TableCell>
+                              <TableCell>{utility.to}</TableCell>
+                              <TableCell>{utility.total}</TableCell>
+                            </TableRow>
+                          );
+                        }}
+                      </For>
+                    );
+                  }}
+                </For>
+              </Show>
             </TableBody>
           </Table>
         </TabsContent>
@@ -438,28 +444,34 @@ const PaymentPage: Component<{}> = (props) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {billingInfo()?.map((bill) => {
-                let utilityTotal = bill.expand?.billing_info.expand?.utilities
-                  .map((
-                    v,
-                  ) => v.total).reduce((a, b) => a + b, 0) as number;
-                const rentPrice =
-                  bill.expand?.billing_info.expand?.room_info?.price || 0;
-                let total = utilityTotal + rentPrice;
-                return (
-                  <TableRow>
-                    <TableCell>
-                      {bill.expand?.billing_info.expand?.room_info?.unit_name}
-                    </TableCell>
-                    <TableCell>
-                      {bill.expand?.to_user?.fb_name ||
-                        bill.expand?.to_user?.email}
-                    </TableCell>
-                    <TableCell>{bill.deadline}</TableCell>
-                    <TableCell>{total}</TableCell>
-                  </TableRow>
-                );
-              })}
+              <Show when={billingInfo() !== undefined}>
+                <For each={billingInfo()}>
+                  {(bill) => {
+                    let utilityTotal = bill.expand?.billing_info.expand
+                      ?.utilities
+                      .map((
+                        v,
+                      ) => v.total).reduce((a, b) => a + b, 0) as number;
+                    const rentPrice =
+                      bill.expand?.billing_info.expand?.room_info?.price || 0;
+                    let total = utilityTotal + rentPrice;
+                    return (
+                      <TableRow>
+                        <TableCell>
+                          {bill.expand?.billing_info.expand?.room_info
+                            ?.unit_name}
+                        </TableCell>
+                        <TableCell>
+                          {bill.expand?.to_user?.fb_name ||
+                            bill.expand?.to_user?.email}
+                        </TableCell>
+                        <TableCell>{bill.deadline}</TableCell>
+                        <TableCell>{total}</TableCell>
+                      </TableRow>
+                    );
+                  }}
+                </For>
+              </Show>
             </TableBody>
           </Table>
         </TabsContent>
@@ -474,21 +486,23 @@ const PaymentPage: Component<{}> = (props) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <For each={transactions()}>
-                {(transaction) => (
-                  <TableRow>
-                    <TableCell>
-                      {transaction.expand?.room.unit_name}
-                    </TableCell>
-                    <TableCell>
-                      {transaction.expand?.tenant?.fb_name ||
-                        transaction.expand?.tenant?.email}
-                    </TableCell>
-                    <TableCell>{transaction.payment_method}</TableCell>
-                    <TableCell>{transaction.amount}</TableCell>
-                  </TableRow>
-                )}
-              </For>
+              <Show when={transactions() !== undefined}>
+                <For each={transactions()}>
+                  {(transaction) => (
+                    <TableRow>
+                      <TableCell>
+                        {transaction.expand?.room.unit_name}
+                      </TableCell>
+                      <TableCell>
+                        {transaction.expand?.tenant?.fb_name ||
+                          transaction.expand?.tenant?.email}
+                      </TableCell>
+                      <TableCell>{transaction.payment_method}</TableCell>
+                      <TableCell>{transaction.amount}</TableCell>
+                    </TableRow>
+                  )}
+                </For>
+              </Show>
             </TableBody>
           </Table>
         </TabsContent>
