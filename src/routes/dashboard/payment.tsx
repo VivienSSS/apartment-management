@@ -26,7 +26,9 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { createAsync } from "@solidjs/router";
 import {
   getAllRentPayment,
+  getAllTransactions,
   insertBillingPayment,
+  insertTransaction,
 } from "~/lib/db/action/payment";
 import { getAllTenants } from "~/lib/db/action/tenant";
 import {
@@ -43,6 +45,7 @@ const PaymentPage: Component<{}> = (props) => {
   const billingInfo = createAsync(() => getAllRentPayment());
   const tenants = createAsync(() => getAllTenants());
   const rooms = createAsync(() => getAllRooms());
+  const transactions = createAsync(() => getAllTransactions());
   const [tenantName, setTenantName] = createSignal<string>("");
   const [roomName, setRoomName] = createSignal<string>("");
   const [currentPaymentMethod, setCurrentPaymentMethod] = createSignal<
@@ -207,7 +210,7 @@ const PaymentPage: Component<{}> = (props) => {
         </Dialog>
         <Dialog>
           <DialogTrigger class="">
-            <Button>Create Trasaction</Button>
+            <Button>Create Transaction</Button>
           </DialogTrigger>
           <DialogContent class="max-w-2x2">
             <DialogHeader>
@@ -216,7 +219,7 @@ const PaymentPage: Component<{}> = (props) => {
                 Add tenants and specify their payment details
               </DialogDescription>
             </DialogHeader>
-            <form class="space-y-3" action={insertBillingPayment} method="post">
+            <form class="space-y-3" action={insertTransaction} method="post">
               <div>
                 <span class="small">Payment method</span>
                 <ToggleGroup class="flex justify-start">
@@ -309,23 +312,38 @@ const PaymentPage: Component<{}> = (props) => {
                     <SelectContent />
                   </Select>
                 </Show>
+                {roomName() && (
+                  <input
+                    type="hidden"
+                    name="room"
+                    value={rooms()?.items.map((val) => {
+                      if (roomName()?.includes(val.unit_name)) return val.id;
+                    }).filter(Boolean)[0]}
+                  />
+                )}
               </div>
-              <div class="grid grid-cols-2 gap-2.5">
-                <div>
-                  <Label>
-                    Electricity
-                  </Label>
-                  <Input type="number" name="electricity-bill" />
-                </div>
-                <div>
-                  <Label>
-                    Water
-                  </Label>
-                  <Input type="number" name="water-bill" />
-                </div>
+              <div>
+                <Label>
+                  Description
+                </Label>
+                <Input type="text" name="description" />
+              </div>
+              <div>
+                <Label>
+                  Amount
+                </Label>
+                <Input type="text" name="amount" />
               </div>
               <DialogFooter>
-                <Button type="submit" variant="default">Create</Button>
+                <Button
+                  onClick={() => {
+                    window.location.href = "/dashboard/payment";
+                  }}
+                  type="submit"
+                  variant="default"
+                >
+                  Create
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -336,6 +354,7 @@ const PaymentPage: Component<{}> = (props) => {
           <TabsTrigger value="rentPayment">Rent payment</TabsTrigger>
           <TabsTrigger value="utilityPayment">Utility payment</TabsTrigger>
           <TabsTrigger value="paymentSchedule">Payment Schedule</TabsTrigger>
+          <TabsTrigger value="transactions">Transactions</TabsTrigger>
         </TabsList>
         <TabsContent value="rentPayment" class="space-y-5 pt-5">
           <Table class="border space-y-2">
@@ -441,6 +460,35 @@ const PaymentPage: Component<{}> = (props) => {
                   </TableRow>
                 );
               })}
+            </TableBody>
+          </Table>
+        </TabsContent>
+        <TabsContent value="transactions">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Room Name</TableHead>
+                <TableHead>Tenant Email / Name</TableHead>
+                <TableHead>Method</TableHead>
+                <TableHead>Amount</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <For each={transactions()}>
+                {(transaction) => (
+                  <TableRow>
+                    <TableCell>
+                      {transaction.expand?.room.unit_name}
+                    </TableCell>
+                    <TableCell>
+                      {transaction.expand?.tenant?.fb_name ||
+                        transaction.expand?.tenant?.email}
+                    </TableCell>
+                    <TableCell>{transaction.payment_method}</TableCell>
+                    <TableCell>{transaction.amount}</TableCell>
+                  </TableRow>
+                )}
+              </For>
             </TableBody>
           </Table>
         </TabsContent>

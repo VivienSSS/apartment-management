@@ -43,7 +43,7 @@ export const login = action(async (formData: FormData) => {
     // update session data
     await session.update(authRecord);
     console.log(authRecord);
-    throw redirect("/dashboard");
+    throw redirect("/dashboard/payment");
   } catch (error) {
     if (error instanceof ClientResponseError && error.status === 400) {
       throw {
@@ -63,8 +63,6 @@ export const validateUser = query(async () => {
   const sessionData = session.data;
   if (Object.keys(sessionData).length === 0) {
     throw redirect("/login");
-  } else {
-    throw redirect("/dashboard");
   }
 }, "validateUser");
 

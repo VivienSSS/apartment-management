@@ -3,6 +3,7 @@ import {
     BillingInfoUtilitiesDateTblRecord,
     BillingTblResponse,
     RoomsTblRecord,
+    TransactionTblResponse,
     UsersRecord,
 } from "~/lib/pocketbase-types";
 import { getPocketbase } from "~/lib/utils";
@@ -69,4 +70,44 @@ export const insertBillingPayment = action(async (form: FormData) => {
         billing_info: billingInfo.id,
         to_user: tenantID,
     });
+});
+
+export const getAllTransactions = query(async () => {
+    "use server";
+
+    const pb = await getPocketbase();
+
+    try {
+        return await pb.collection("transaction_tbl").getFullList<
+            TransactionTblResponse<{
+                tenant: UsersRecord;
+                room: RoomsTblRecord;
+            }>
+        >({
+            expand: "tenant,room",
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}, "getAllTransactions");
+
+export const insertTransaction = action(async (form: FormData) => {
+    "use server";
+
+    const payload = {
+        tenant: form.get("tenant"),
+        room: form.get("room"),
+        amount: form.get("amount"),
+        description: form.get("description"),
+        payment_method: form.get("payment-method"),
+    };
+
+    const pb = await getPocketbase();
+
+    try {
+        console.log(payload);
+        await pb.collection("transaction_tbl").create(payload);
+    } catch (error) {
+        console.error(error);
+    }
 });

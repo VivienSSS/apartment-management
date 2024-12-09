@@ -54,11 +54,6 @@ export const route = {
 
 const items = [
   {
-    title: "Overview",
-    icon: Home,
-    href: "/dashboard",
-  },
-  {
     title: "Payment",
     icon: PhilippinePeso,
     href: "/dashboard/payment",
