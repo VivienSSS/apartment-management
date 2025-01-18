@@ -22,6 +22,9 @@ app.config.timestamp_*.js
 *.launch
 .settings/
 
+# Pocketbase backend
+pb_data
+
 # Temp
 gitignore
 
