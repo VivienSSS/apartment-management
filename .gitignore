@@ -22,6 +22,8 @@ app.config.timestamp_*.js
 *.launch
 .settings/
 
+tmp
+
 # Pocketbase backend
 pb_data
 
