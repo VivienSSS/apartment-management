@@ -1,0 +1,16 @@
+package web
+
+type BaseHTMLProps struct {
+	Metadata templ.Component
+}
+
+templ BaseHTML(props BaseHTMLProps) {
+	<html>
+		<head>
+			@props.Metadata
+		</head>
+		<body>
+			{ children... }
+		</body>
+	</html>
+}
