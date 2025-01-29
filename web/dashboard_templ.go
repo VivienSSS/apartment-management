@@ -8,7 +8,7 @@ package web
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func LogInPageMetadata() templ.Component {
+func DashboardPageMetadata() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -37,7 +37,7 @@ func LogInPageMetadata() templ.Component {
 	})
 }
 
-func LogInPage() templ.Component {
+func DashboardPage() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -70,14 +70,14 @@ func LogInPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<main class=\"h-screen flex flex-col justify-center items-center\"><form class=\"border p-4 rounded-md shadow-md space-y-5 w-1/4\"><div><label for=\"login\" class=\"block text-sm/7 font-medium text-gray-900\">Log In</label></div><div class=\"flex flex-col items-start relative\"><label class=\"font-semibold\">Email</label><div class=\"absolute bottom-2 left-2 text-gray-400\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-mail\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"></rect><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"></path></svg></div><input placeholder=\"examplename@email.com\" class=\"w-full border border-gray-400 rounded-md p-1 pl-7\" type=\"email\" name=\"email\"></div><div class=\"flex flex-col items-start relative\"><label class=\"font-semibold\">Password</label><div class=\"absolute bottom-2 left-2 text-gray-400\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-key-round\"><path d=\"M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z\"></path><circle cx=\"16.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"></circle></svg></div><input placeholder=\"***********\" class=\"w-full border border-gray-400 rounded-md p-1 pl-7\" type=\"password\" name=\"password\"></div><button type=\"submit\" class=\"bg-slate-700 px-4 py-2 w-full rounded-md text-white border text-black\">Sign In</button></form></main>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<main class=\"h-screen flex\"><body class=\"bg-slate-200 flex\"><div class=\"flex flex-col bg-slate-600 p-4 w-64 h-screen\"></div></body></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
 		templ_7745c5c3_Err = BaseHTML(BaseHTMLProps{
-			Metadata: LogInPageMetadata(),
+			Metadata: DashboardPageMetadata(),
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

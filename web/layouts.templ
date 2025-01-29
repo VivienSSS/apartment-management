@@ -7,6 +7,7 @@ type BaseHTMLProps struct {
 templ BaseHTML(props BaseHTMLProps) {
 	<html>
 		<head>
+			<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 			@props.Metadata
 		</head>
 		<body>
