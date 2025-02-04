@@ -1,17 +1,47 @@
 package web
 
 templ DashboardPageMetadata() {
-	<title>Login Page</title>
+	<title>Dashboard Page</title>
 }
 
 templ DashboardPage() {
 	@BaseHTML(BaseHTMLProps{
 		Metadata: DashboardPageMetadata(),
 	}) {
-		<main class="h-screen flex">
-			<body class="bg-slate-200 flex">
-				<div class="flex flex-col bg-slate-600 p-4 w-64 h-screen"></div>
-			</body>
+		<main class="h-screen w-full flex flex-row">
+			<aside class="bg-[#abaaa9] p-4 border-r w-1/5">
+				<ul class="bg-[#abaaa9] menu flex flex-col gap-2.5">
+					<li>
+						<p class="menu-title">Navigation</p>
+					</li>
+					<li>
+						<a href="/">
+							<span class="icon-[lucide--chart-column-increasing]"></span>
+							Home
+						</a>
+					</li>
+					<li>
+						<a href="/">
+							<span class="icon-[lucide--receipt-text]"></span>Billing
+						</a>
+					</li>
+					<li>
+						<a href="/">
+							<span class="icon-[lucide--philippine-peso]"></span>
+							Payments
+						</a>
+					</li>
+					<li>
+						<a href="/">
+							<span class="icon-[lucide--calendar-check-2]"></span>
+							Schedules
+						</a>
+					</li>
+				</ul>
+			</aside>
+			<article class="p-4 w-3/4">
+				hello im an articless
+			</article>
 		</main>
 	}
 }

@@ -1,0 +1,12 @@
+package web
+
+templ BillingPageMetadata() {
+	<title>Billing Page</title>
+}
+
+templ BillingPage() {
+	@BaseHTML(BaseHTMLProps{
+		Metadata: BillingPageMetadata(),
+	}) {
+	}
+}

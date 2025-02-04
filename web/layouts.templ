@@ -1,5 +1,7 @@
 package web
 
+//base for each html page
+
 type BaseHTMLProps struct {
 	Metadata templ.Component
 }
@@ -7,7 +9,8 @@ type BaseHTMLProps struct {
 templ BaseHTML(props BaseHTMLProps) {
 	<html>
 		<head>
-			<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+			<script src="./assets/flyonui.js"></script>
+			<link rel="stylesheet" href="./assets/out.css"/>
 			@props.Metadata
 		</head>
 		<body>
