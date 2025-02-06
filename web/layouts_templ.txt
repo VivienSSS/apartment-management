@@ -1,3 +1,3 @@
-<html><head><script src=\"./assets/flyonui.js\"></script><link rel=\"stylesheet\" href=\"./assets/out.css\">
+<html><head><script src=\"./assets/flyonui.js\"></script><link rel=\"stylesheet\" href=\"./assets/out.css\"><script defer src=\"./assets/alpine-collapse.min.js\"></script><script defer src=\"./assets/alpine.min.js\"></script><script defer src=\"./assets/flyonui.js\"></script>
 </head><body>
 </body></html>
