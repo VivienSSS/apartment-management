@@ -6,8 +6,6 @@ install/ubuntu:
 install/go:
 	@sudo snap install go --classic
 	@go install github.com/a-h/templ/cmd/templ@latest
-	@echo "export PATH="$$PATH:$$HOME/go/bin"" >> ~/.bashrc
-	@echo "export GOPATH="$$HOME/go"" >> ~/.bashrc
 
 install/node:
 	@curl -o- https://fnm.vercel.app/install | bash
