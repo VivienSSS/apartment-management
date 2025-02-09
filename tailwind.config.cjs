@@ -8,17 +8,23 @@ export default {
   flyonui: {
     themes: [
       {
-        mytheme: {
-          primary: "#ff00b3",
-          secondary: "#00e9ff",
-          accent: "#00b5ff",
-          neutral: "#12080a",
-          "base-100": "#e7e5e4"
+        flyonui: {
+          themes: ["soft"]
+          /*mytheme: {
+            primary: "#ff00b3",
+            secondary: "#00e9ff",
+            accent: "#00b5ff",
+            neutral: "#12080a",
+            "base-100": "#e7e5e4"*/
           //palitan mo lang hex code to ur desired color
+          //}
+          //}
+          //]
         }
       }
     ]
   },
+
   plugins: [
     require("flyonui"),
     require("flyonui/plugin"), // Require only if you want to use FlyonUI JS component

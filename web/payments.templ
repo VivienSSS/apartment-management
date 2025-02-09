@@ -9,8 +9,8 @@ templ PaymentsPage() {
 		Metadata: PaymentsMetadata(),
 	}) {
 		<main class="h-screen w-full flex flex-row">
-			<aside class="bg-[#abaaa9] p-4 border-r w-1/5">
-				<ul class="bg-[#abaaa9] menu flex flex-col gap-2.5">
+			<aside class="menu h-full p-4 border-r w-1/5 border-r border-black rounded-none">
+				<ul class="menu flex flex-col gap-2.5">
 					<li>
 						<p class="menu-title">Navigation</p>
 					</li>
@@ -39,27 +39,36 @@ templ PaymentsPage() {
 					</li>
 				</ul>
 			</aside>
-			<article class="p-4 w-3/4">
-				<div class="flex-none font-semibold text-xl text-black text-4xl" aria-label="Payments">
-					Payments
-				</div>
-				<hr class="border-[#abaaa9] border-2 border-b mt-6"/>
+			<article class="p-4 w-4/5">
+				<div class="divider divider-start after:border-t-2 before:border-t-2 text-xl font-semibold">Payments</div>
 				<div class="flex justify-end gap-x-2">
-					<button class="px-4 py-2 bg-[#001316] text-white mt-4 rounded-md w-1/5">Create Bill</button>
-					<button class="px-4 py-2 bg-[#001316] text-white mt-4 rounded-md w-1/5">Create Transaction</button>
+					<button class="px-4 py-2 bg-[#001316] text-white mt-1 rounded-md w-1/5">Create Bill</button>
+					<button class="px-4 py-2 bg-[#001316] text-white mt-1 rounded-md w-1/5">Create Transaction</button>
 				</div>
-				<div class="breadcrumbs">
-					<ul>
-						<li>
-							<a href="#">Home</a>
-						</li>
-						<li class="breadcrumbs-separator rtl:rotate-180"><span class="icon-[tabler--chevron-right]"></span></li>
-						<li>
-							<a href="#">Components</a>
-						</li>
-						<li class="breadcrumbs-separator rtl:rotate-180"><span class="icon-[tabler--chevron-right]"></span></li>
-						<li aria-current="page">Breadcrumb</li>
-					</ul>
+				<div class="border-base-content/25 w-full rounded-lg border px-4 py-2 mt-4" x-data="{visible:true}">
+					<div class="breadcrumbs">
+						<ul>
+							<div>
+								<button href="#rentstuff" x-on:click="visible = !visible">Rent Payment</button>
+							</div>
+							<div class="breadcrumbs-separator rtl:-rotate-[40deg]">/</div>
+							<div>
+								<button href="#">Utility Payment</button>
+							</div>
+							<div class="breadcrumbs-separator rtl:-rotate-[40deg]">/</div>
+							<div>
+								<button href="#">Payment Schedule</button>
+							</div>
+							<div class="breadcrumbs-separator rtl:-rotate-[40deg]">/</div>
+							<div>
+								<button href="#">Transactions</button>
+							</div>
+						</ul>
+					</div>
+					<div href="#rentstuff" x-show="visible" x-collapse>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. In et sodales eros. In commodo turpis vitae magna egestas faucibus. Maecenas venenatis sit amet nisi id tempor. Duis sed ornare libero, dictum egestas sapien. Ut eu suscipit est, a ultricies eros. Aenean id risus elementum, ultrices leo ac, fringilla arcu. Pellentesque elementum leo eu lorem gravida scelerisque. Vivamus a aliquet mi. Nullam eleifend lectus et leo ullamcorper, in auctor purus fringilla. Morbi aliquet ante massa, in efficitur ligula tempor vitae. Cras sodales in tortor fringilla accumsan. Aliquam finibus velit nec nulla molestie viverra.
+						Donec vel diam maximus, aliquet felis non, fringilla leo. Nullam pharetra molestie ultricies. Suspendisse quis quam ac ante lacinia ultrices sed quis nunc. Phasellus nec commodo arcu. Praesent at porttitor turpis, vel molestie ipsum. Aliquam at tempor elit. Aliquam consequat massa quis eros sagittis dignissim.
+					</div>
 				</div>
 			</article>
 		</main>
